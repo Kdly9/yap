@@ -1,0 +1,273 @@
+#include <fstream>
+#include <iostream>
+#include <stdlib.h>
+#include <windows.h>
+#include <stdio.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <math.h>
+#include <ctime>
+#include <cstring>
+using namespace std;
+
+double funcindouble (){ // ввод вещественных чисел
+    double fcin;
+    while (!(cin >> fcin) || (cin.peek() != '\n'))
+    {
+        cin.clear();
+        while (cin.get() != '\n');
+        cout << "Повторите ввод" << endl;
+    }
+    return fcin;
+}
+int funcinint (){ // ввод целых чисел
+    int fcin;
+    while (!(cin >> fcin) || (cin.peek() != '\n'))
+    {
+        cin.clear();
+        while (cin.get() != '\n');
+        cout << "Повторите ввод" << endl;
+    }
+    return fcin;
+}
+int funraz() { // функция размерности
+    int fraz;
+    do {
+    cout << "Введите размерность величины" << endl;
+    cout << "1 - градус \n";
+    cout << "2 - радиан \n";
+    cout << "3 - безразмерная величина \n";
+    fraz=funcinint();
+    }
+    while (fraz<1 || fraz>3);
+    return fraz;
+}
+int funop(int fop) { // выбор операции
+    int rezfunop;
+    if (fop<3) {
+        do {
+        cout << "1 для вычисления sin \n" << "2 для вычисления cos  \n";
+        cout << "3 для вычисления tan \n" << "4 для вычисления cotan \n";
+        cout << "5 для вычисления giper_sin \n" << "6 для вычисления giper_cos \n";
+        cout << "7 для вычисления giper_tan \n";
+        rezfunop=funcinint();
+        }
+        while (rezfunop<1 || rezfunop>7);
+	} else {
+	    do {
+        cout << "8 для вычисления arcsin \n" << "9 для вычисления arccos  \n";
+        cout << "10 для вычисления arctan \n" << "11 для вычисления arccotan \n";
+        rezfunop=funcinint();
+        }
+        while (rezfunop<8 || rezfunop>11);
+	}
+	return rezfunop;
+}
+
+double funsin (int fraz, double fgrv){//sin
+    double frezult;
+    if (fraz==1) {
+            frezult = sin (fgrv*M_PI/180);
+    } else { frezult = sin (fgrv);}
+    return frezult;
+}
+
+double funcos (int fraz, double fgrv){//cos
+    double frezult;
+    if (fraz==1) {
+            frezult = cos (fgrv*M_PI/180);
+    } else { frezult = cos (fgrv);}
+    return frezult;
+}
+
+double funtan (int fraz, double fgrv){//tan
+    double frezult;
+    if (fraz==1 && fgrv!=90 && fgrv!=270 && fgrv!=-90 && fgrv!=-270) { frezult = tan (fgrv*(M_PI/180));}
+        else {
+            if (fraz==2 && fgrv!=M_PI/2.0 && fgrv!=M_PI*1.5 && fgrv!=-M_PI/2.0 && fgrv!=-M_PI*1.5) {
+                frezult = tan (fgrv);
+            } else { cout<<"Ошибка!!!" << endl;}
+    }
+    return frezult;
+}
+
+double funcotan (int fraz, double fgrv){//cotan
+    double frezult;
+    if (fraz==1 && fgrv!=0 && fgrv!=180 && fgrv!=-180) { frezult = 1/tan (fgrv*M_PI/180);}
+        else {
+            if (fraz==2 && fgrv!=0 && fgrv!=M_PI && fgrv!=-M_PI) {
+                frezult = 1/tan (fgrv);
+            } else { cout<<"Ошибка!!!" << endl;}
+    }
+    return frezult;
+}
+
+double fungsin (int fraz, double fgrv){//гиперболичский sin
+    double frezult;
+    if (fraz==1) {frezult=sinh(fgrv*M_PI/180);}
+        else {frezult=sinh(fgrv);}
+    return frezult;
+}
+
+double fungcos (int fraz, double fgrv){//гиперболичский cos
+    double frezult;
+    if (fraz==1) {frezult=cosh(fgrv*M_PI/180);}
+        else {frezult=cosh(fgrv);}
+    return frezult;
+}
+
+double fungtan (int fraz, double fgrv){//гиперболичский tan
+    double frezult;
+    if (fraz==1) {frezult=tanh(fgrv*M_PI/180);}
+        else {frezult=tanh(fgrv);}
+    return frezult;
+}
+
+double funasin (double fgrv){//арксинус
+    double frezult;
+    if (fgrv>=-1 && fgrv<=-1) {frezult=asin(fgrv);}
+        else {cout<<"Ошибка!!!" << endl;}
+    return frezult;
+}
+
+double funacos (double fgrv){//арккосинус
+    double frezult;
+    if (fgrv>=-1 && fgrv<=-1) {frezult=acos(fgrv);}
+        else {cout<<"Ошибка!!!" << endl;}
+    return frezult;
+}
+
+double funatan (double fgrv){//арктанпнгес
+    double frezult;
+    frezult=atan(fgrv);
+    return frezult;
+}
+
+double funacotan(double fgrv){//арккотангенс
+    double frezult;
+    frezult=M_PI/2-atan(fgrv);
+    return frezult;
+}
+
+char *funtempe(){//получение имени файла
+    char *tempe; //переменнfz для получения значения TEMP/TMP
+// получем значение переменной TEMP
+    tempe = getenv("TEMP");
+	if (tempe=="") { tempe = getenv("TMP");}
+	char buff[15];
+//формируем файл *****.txt
+	char *fint;
+	srand(time(0)); // включение случайных чисел
+	fint=itoa (rand() % 32767+10000+rand() % 32767+10000+rand() % 32767+10000,buff,10);
+    strcat(tempe,"\\");
+    strcat(tempe,fint);
+    strcat(tempe,".txt");
+    return tempe;
+    }
+
+int main(){
+	setlocale(LC_ALL, "rus");
+	int raz; // размерность/
+	double grv; // градусы, радианы, безразмерная величина
+	int oper; // операция
+	double rezult; // результат
+	char work; // если 'Y/y' то продолжить
+    char *ftempe;//переменная с именем файла
+
+    ftempe=funtempe(); //Полное имя файла
+//cout<<ftempe;
+    ofstream fout(ftempe);//открываем файл
+    do {
+// ввод размерности величины
+    raz=funraz(); // размерность
+    cout<<raz<<" (размерность) "<< endl;
+// ввод значения
+    switch (raz){
+	case 1:// градусы
+	{
+        cout << "Введите значение (град.) " << endl;
+        grv=funcindouble();
+        cout <<grv<<" (град.)"<< endl;
+        break;
+	}
+	case 2:{// радианы
+        cout << "Введите значение (рад.)" << endl;
+        grv=funcindouble();
+        cout <<grv<<" (рад.)"<< endl;
+        break;
+	}
+	case 3:{// безразмерная величина
+        cout << "Введите значение (безраз.величина) " << endl;
+        grv=funcindouble();
+        cout <<grv<<" (безраз.величин.) "<< endl;
+        break;
+	}
+	};
+	cout << "Введите " << endl;
+	oper= funop (raz);
+	cout<<oper<<" (операция) "<<  endl;
+	switch (oper){
+	case 1: {
+	    rezult=funsin(raz, grv);
+	    break;}
+	case 2: {
+        rezult=funsin(raz, grv);
+	    break;}
+	case 3:{
+	    rezult=funtan(raz, grv);
+	    cout<<rezult<< "   "<< endl;
+	    break;
+	}
+	case 4:{
+	    rezult=funcotan(raz, grv);
+	    break;
+	}
+	case 5:{
+	    rezult=fungsin(raz, grv);
+	    break;
+	}
+	case 6:{
+	    rezult=fungcos(raz, grv);
+	    break;
+	}
+	case 7:{
+	    rezult=fungtan(raz, grv);
+	    break;
+	}
+	case 8:{
+	    rezult=funasin(grv);
+	    break;
+	}
+	case 9:{
+	    rezult=funacos(grv);
+	    break;
+	}
+	case 10:{
+	    rezult=funatan(grv);
+	    break;
+	}
+	case 11:{
+	    rezult=funacotan(grv);
+	    break;
+	}
+	};
+	cout<<"результат "<<rezult<< endl;
+// запись в файл выбраной размерности и значение величины {}
+    fout <<"размерность: "<<raz<<" введеное знвчение: "<<grv<<" результат: "<< rezult  << endl;
+    cout <<"Продолжить (Y)? "<< endl;
+    cin >> work;
+    }
+    while (work=='Y' || work=='y');
+//закрываем файл
+    fout.close(); // закрываем файл
+    cout <<"вывод результатов "<<endl;
+    ifstream fin(ftempe); // открываем файл на чтение
+    if (!fin.is_open()) { cout << "невозможно открыть файл\n";}
+        else {
+                char srez;
+                while (fin.get(srez)) { cout << srez;}
+        }
+    fin.close();
+	system("pause");
+	return 0;
+}
